@@ -1,0 +1,20 @@
+# Backend-Teams
+# TODO: Ersetze Platzhalter durch echte GitHub-Usernamen
+
+/services/participant/ @alice @bob
+/services/workout/ @carol @dave
+/services/analytics/ @eve @frank
+/services/recommendation/ @gina @hugo
+/services/event/ @irene @jan
+/services/ticket/ @irene @jan
+/services/vehicle/ @kevin @lena
+/services/booking/ @kevin @lena
+/services/payment/ @maria @nils
+
+# Frontend
+/view/ @oscar @paula
+
+# CI/Infra
+/ops/ @infra-team
+/.github/ @infra-team
+

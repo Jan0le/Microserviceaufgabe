@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ develop, main ]
+    paths:
+      - "services/**"
+      - "view/**"
+      - "docs/**"
+      - ".github/**"
+  push:
+    branches: [ develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - participant
+          - workout
+          - analytics
+          - recommendation
+          - event
+          - ticket
+          - vehicle
+          - booking
+          - payment
+          - view
+    steps:
+      - uses: actions/checkout@v4
+
+      # Beispiel: Node für View, .NET für Services – passt an eure Tech an
+      - name: Set up Node for view
+        if: matrix.service == 'view'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up .NET for services
+        if: matrix.service != 'view'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build & Test
+        run: |
+          if [ "${{ matrix.service }}" = "view" ]; then
+            cd view/web && npm ci && npm run build
+          else
+            cd services/${{ matrix.service }} && dotnet build --nologo && dotnet test --nologo
+          fi
+
