@@ -174,4 +174,3 @@ git checkout develop
 - **breaking:** Breaking Changes
 
 Pro Task ein Issue. PRs müssen Issues referenzieren: "Fixes #123".
-
