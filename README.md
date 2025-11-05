@@ -35,9 +35,22 @@ Microservices-basierte Anwendung für Event-Management mit Teilnehmern, Workouts
 
 - **main** - Produktions-Branch (nur über Release/Hotfix)
 - **develop** - Entwicklungs-Branch (Hauptentwicklungszweig)
+- **p1, p2, p3** - Projekt-Branches (gestuftes Integrationsmodell)
 - **feature/\<service>/\<beschreibung>** - Feature-Branches
 - **release/\<version>** - Release-Branches (optional)
 - **hotfix/\<beschreibung>** - Hotfix-Branches für Produktionsfixes
+
+### Gestuftes Integrationsmodell
+
+Das Projekt verwendet ein gestuftes Integrationsmodell mit drei Projekt-Branches:
+
+1. **develop** → **p1** → **p2** → **p3** → **main**
+2. Features werden von `develop` in `p1` gemerged
+3. `p1` wird in `p2` gemerged
+4. `p2` wird in `p3` gemerged
+5. `p3` wird final in `main` gemerged
+
+Dies ermöglicht eine schrittweise Integration und Testung über die drei Projektphasen.
 
 ### Workflow
 
@@ -84,6 +97,34 @@ Nach Stabilisierung:
 - Tag setzen: `git tag -a v2025.11.2 -m "Sprint 2 release"`
 - `main` → `develop` zurückmergen
 
+#### Projekt-Branch-Workflow (p1 → p2 → p3)
+
+```bash
+# Feature von develop in p1 mergen
+git checkout p1
+git pull
+git merge develop
+git push
+
+# p1 in p2 mergen
+git checkout p2
+git pull
+git merge p1
+git push
+
+# p2 in p3 mergen
+git checkout p3
+git pull
+git merge p2
+git push
+
+# p3 in main mergen (nach Tests)
+git checkout main
+git pull
+git merge p3
+git push
+```
+
 #### Hotfix
 
 ```bash
@@ -125,13 +166,19 @@ Verwende [Conventional Commits](https://www.conventionalcommits.org/):
 - ✅ Require status checks to pass
 - ✅ Allow merge: Squash oder Rebase
 
+### p1, p2, p3
+
+- ✅ Require PR before merging (1 Reviewer)
+- ✅ Require status checks to pass
+- ✅ Allow merge: Squash oder Rebase
+
 **Hinweis:** Branch-Schutz-Regeln müssen in GitHub UI konfiguriert werden (Settings → Branches → Add rule).
 
 ## CI/CD
 
 GitHub Actions CI läuft automatisch bei:
-- Pull Requests zu `develop` oder `main`
-- Pushes zu `develop`
+- Pull Requests zu `develop`, `main`, `p1`, `p2`, `p3`
+- Pushes zu `develop`, `p1`, `p2`, `p3`
 
 Alle Services werden parallel gebaut und getestet.
 
