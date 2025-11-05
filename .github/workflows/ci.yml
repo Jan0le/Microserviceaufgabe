@@ -2,14 +2,14 @@ name: CI
 
 on:
   pull_request:
-    branches: [ develop, main ]
+    branches: [ develop, main, p1, p2, p3 ]
     paths:
       - "services/**"
       - "view/**"
       - "docs/**"
       - ".github/**"
   push:
-    branches: [ develop ]
+    branches: [ develop, p1, p2, p3 ]
 
 jobs:
   build-and-test:
